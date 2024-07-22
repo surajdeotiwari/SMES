@@ -1,46 +1,12 @@
 from flask_restful import Resource
-from db.db import db, User, Author, Books, BLOB, Section,Data
+from db.db import db, User, BLOB,Data
 from flask import make_response,request,redirect,url_for,flash
 from werkzeug.utils import secure_filename
 import base64
 from werkzeug.security import generate_password_hash 
 import time
 from datetime import datetime, timedelta
-class CreateBook(Resource):
-    def post(self):
-        book_name = request.form["book_name"]
-        author_id = request.form["author_id"]
-        book_pdf = request.files["book_pdf"]
-        publisher = request.form["publisher"]
-        year = request.form["year"]
-        topic = request.form["topic"]
-        # photo = request.files["photo"]
-        file =request.files["photo"]
-        abstract = request.form["abstract"]
-        # photo_filename = secure_filename(photo.filename)
-        book_pdf_filename = secure_filename(book_pdf.filename)
-        book_pdf_data = book_pdf.read()
-        file_data = file.read()
-        file_path = secure_filename(file.filename)
-        mimetype = file.mimetype
-        book = Books(
-            book_name=book_name,
-            author_id=author_id,
-            book_pdf=book_pdf_data,
-            book_mimetype=book_pdf.mimetype,
-            publisher=publisher,
-            year=year,
-            topic=topic,
-            photo=file.read(),
-            file=file_path,
-            mimetype=mimetype,
-            abstract=abstract
-        )
-        db.session.add(book)
-        db.session.commit()
 
-        flash("Book Created Successfully")
-        return redirect(url_for('base.book_uploads'))
 class CreateUser(Resource):
     def post(self):
         name = request.form["name"]
@@ -70,39 +36,7 @@ class CreateUser(Resource):
             return redirect(url_for('login.return_admin_login_page'))
         else:
             return redirect(url_for('login.return_user_login_page'))
-class CreateAuthor(Resource):
-    def post(self):
-        name = request.form["name"]
-        bio = request.form["bio"]
-        file =request.files["photo"]
-        file_path = secure_filename(file.filename)
-        mimetype = file.mimetype
-        author = Author(name=name,bio=bio,photo=file.read(),file=file_path,mimetype=mimetype)
-        print(file)
-        db.session.add(author)
-        db.session.commit()
-        flash("Author has been created successfully")
-        return redirect(url_for('base.author_uploads'))
 
-class CreateSection(Resource):
-    def post(self):
-        name = request.form["name"]
-        description = request.form["description"]
-        section = Section(section_name=name,description=description)
-        db.session.add(section)
-        db.session.commit()
-        flash("Section has been added")
-        return redirect(url_for('base.addSection'))
-class RemoveAuthor(Resource):
-    def post(self):
-        author = Author.query.filter_by(id=id).first()
-        db.session.delete(author)
-        db.session.commit()
-class RemoveBook(Resource):
-    def post(self):
-        book = Books.query.filter_by(id=id).first()
-        db.session.delete(book)
-        db.session.commit()
 
 class RemoveUser(Resource):
     def post(self):

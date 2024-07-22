@@ -1,9 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 {% include 'headers.html' %}
+<head>
+    <style>
+        body {
+            background-color: #007bff; /* Blue background color for the entire page */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: darkblue;
+        }
+
+        .container {
+            background-color: #ffffff; /* White background for content */
+            color: #000000; /* Black text color for content */
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+
+        .navbar-brand img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .alert {
+            background-color: #dc3545; /* Red background for alerts */
+            color: #ffffff;
+        }
+
+        .display-4, .display-5 {
+            color: #0056b3; /* Dark blue for headings to stand out */
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .list-unstyled li {
+            margin-bottom: 10px;
+        }
+
+        /* Ensure links are readable */
+        a {
+            color: #0056b3; /* Dark blue for links */
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
 <body>
+    
     {% include 'navbar.html' %}
-    <div class="container">
+    <div class="container mt-5">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <div class="alert alert-danger d-flex justify-content-between align-items-center">
@@ -16,27 +67,41 @@
         </div>
         {% endif %}
         {% endwith %}
-        <section>
-            <h2>Introduction</h2>
-            <p>
-                Despite increasing awareness of the importance of energy conservation, many individuals and organizations lack effective tools to monitor and manage their energy consumption in real-time. Traditional energy monitoring systems are often expensive, complex to install, and offer limited accessibility, hindering widespread adoption. Consequently, there is a need for an affordable, user-friendly, and scalable energy monitoring solution that provides accurate real-time data and actionable insights to enable informed decision-making for energy conservation and cost reduction.
+        
+        <section class="mb-5">
+            <h2 class="display-4 text-center">Revolutionize Your Energy Management</h2>
+            <p class="lead text-center">
+                Imagine having the power to monitor and control your energy consumption with ease. Our innovative energy monitoring solution does just that, providing you with real-time insights and control like never before. Whether you're a homeowner aiming to reduce utility bills or a business seeking to optimize energy usage, our system offers a comprehensive and intuitive approach to energy management.
             </p>
         </section>
 
-        <section>
-            <h2>System Components</h2>
-            <p>
-                To address this need, we have implemented a system utilizing Arduino programming on a NodeMCU platform. The NodeMCU, an open-source IoT platform, is integrated with various sensors to capture real-time energy consumption data. This data is then processed and transmitted wirelessly to a central server for analysis. The use of Arduino programming ensures flexibility and ease of customization, allowing the system to be tailored to specific needs. Additionally, the NodeMCU's compatibility with Wi-Fi enables seamless connectivity, making the system accessible from anywhere. This approach not only reduces costs but also simplifies the installation process, making it feasible for a wide range of users.
+        <section class="mb-5">
+            <h2 class="display-5 text-center">Meet the NodeMCU: Your Gateway to Smart Energy Monitoring</h2>
+            <p class="text-center">
+                At the core of our system is the NodeMCU, a powerful and versatile IoT platform that serves as the heart of your energy monitoring setup. Here's why NodeMCU is the ideal choice for our solution:
             </p>
+            <ul class="list-unstyled text-center">
+                <li><strong>Seamless Connectivity:</strong> With built-in Wi-Fi, NodeMCU ensures your energy data is always at your fingertips, accessible from anywhere with an internet connection.</li>
+                <li><strong>Customizable and Flexible:</strong> Powered by Arduino programming, the NodeMCU offers unparalleled flexibility. Customize your monitoring system to fit your specific needs and preferences.</li>
+                <li><strong>Cost-Effective Innovation:</strong> NodeMCU provides a high-performance solution at a fraction of the cost of traditional energy monitoring systems, making advanced technology accessible to everyone.</li>
+            </ul>
         </section>
 
-        <section>
-            <h2>Summary</h2>
-            <p>
-                Our energy monitoring system offers a cost-effective, user-friendly solution for real-time energy management. By leveraging the capabilities of the NodeMCU and Arduino programming, users can benefit from accurate data and actionable insights without the high costs and complexities typically associated with traditional systems.
+        <section class="mb-5">
+            <h2 class="display-5 text-center">Why Choose Our Energy Monitoring Solution?</h2>
+            <p class="text-center">
+                Our energy monitoring system is more than just a tool—it's a game-changer. Here's how our solution stands out:
+            </p>
+            <ul class="list-unstyled text-center">
+                <li><strong>Real-Time Data:</strong> Get immediate insights into your energy consumption, allowing you to make informed decisions and take action quickly.</li>
+                <li><strong>Easy Installation:</strong> Designed with user-friendliness in mind, our system is easy to install and set up, so you can start monitoring your energy usage with minimal effort.</li>
+                <li><strong>Actionable Insights:</strong> Beyond just data, our system provides actionable insights to help you optimize energy usage, reduce costs, and contribute to a more sustainable future.</li>
+            </ul>
+            <p class="text-center">
+                Embrace the future of energy management with our cutting-edge solution. Experience the convenience, efficiency, and savings that come with advanced energy monitoring technology. Get started today and transform the way you manage your energy.
             </p>
         </section>
     </div>
+    <!-- {% include 'footer.html' %} -->
 </body>
-<footer>{%include 'footer.html'%}</footer>
 </html>

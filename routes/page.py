@@ -1,157 +1,31 @@
-from flask import Blueprint,render_template,request,Response,flash,redirect,url_for
+from flask import Blueprint,render_template,request,Response,flash,redirect,url_for,send_file, render_template_string
 from jinja2 import TemplateNotFound
 import requests
 from flask_login import login_required, logout_user, current_user
-from db.db import Books,Author,Issue
+import os
+import subprocess
+import tempfile
+import time
 page = Blueprint("base",__name__,template_folder="templates",url_prefix="/")
 @page.route('/')
 def home_render():
     return render_template("base.html",title="SMES - Home")
-@page.route('/books')
 
-def book_render():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getBooks'
-    response = requests.get(url)
-    # ap_book = f'{scheme}://{host}/approvebook'
-    # ap_book = requests.get(url).json()
-    
-    return render_template("books.html", title="SMES - Books", books=response.json())
-@page.route('/authors')
-def author_render():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getAuthors'
-    response = requests.get(url)
-    return render_template("authors.html", title="SMES - Authors",authors=response.json())
-@page.route('/search', methods=['GET', 'POST'])
-def search_render():
-    search = request.form["query"]
-    books = Books.query.filter(Books.book_name.ilike(f"%{search}%")).all()
-    authors = Author.query.filter(Author.name.ilike(f"%{search}%")).all()
-    return render_template("result.html", title="SMES - Search",books=books,authors=authors)
 @page.route('/dashboard', methods=['GET','POST'])
 @login_required
 def dashboard():
-    # books = Books.query.all()
-    # authors = Author.query.all()
-    # query = Issue.query.filter_by   (status="Approved")
-    # lst = []
-    # for q in query:
-    #     lst.append({
-    #         "assigned_to": q.assigned_to,
-    #         "id": q.book_id
-    #         })
-    return render_template("dashboard.html", title="SMES - Book Upload", books=len(books),authors=len(authors),lst=lst)
-@page.route('/book_uploads', methods=['GET','POST'])
-@login_required
-def book_uploads():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getAuthors'
-    response = requests.get(url)
-    section_url = f'{scheme}://{host}/getSections'
-    section = requests.get(section_url)
-    return render_template("upload_book.html", title="SMES - Book Upload", authors=response.json(), sections=section.json())
-@page.route('/add_author', methods=['GET','POST'])
-@login_required
-def author_uploads():
-    return render_template("upload_authors.html", title="SMES - Add Author")
+    return render_template("dashboard.html", title="SMES - Book Upload")
+
 @page.route('/changepassword', methods=['GET','POST'])
 @login_required
 def changePassword():
     return render_template("changePassword.html", title="SMES - Change Password")
-@page.route('editBook', methods=['GET','POST'])
-@login_required
-def editBook():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getBooks'
-    response = requests.get(url)
-    author_url = f'{scheme}://{host}/getAuthors'
-    authors = requests.get(author_url)
-    section_url = f'{scheme}://{host}/getSections'
-    section = requests.get(section_url)
-    return render_template("editBook.html", title="SMES - Edit Book",books=response.json(),authors=authors.json(),sections=section.json())
-@page.route('addsection', methods=['GET','POST'])
-@login_required
-def addSection():
-    return render_template("section.html", title="SMES - Add Section")
-@page.route('bookDelete', methods=['GET','POST'])
-@login_required
-def deleteBook():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getBooks'
-    response = requests.get(url)
-    return render_template("deleteBook.html", title="SMES - Delete Book", books=response.json())
 
-# getAuthors
-@page.route('authorDelete', methods=['GET','POST'])
-@login_required
-def deleteAuthor():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getAuthors'
-    response = requests.get(url)
-    return render_template("deleteAuthor.html", title="SMES - Delete Author", authors=response.json())
 
-@page.route('sectionDelete', methods=['GET','POST'])
-@login_required
-def deleteSection():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getSections'
-    response = requests.get(url)
-    return render_template("deleteSection.html", title="SMES - Delete Section", sections=response.json())
-
-@page.route('editAuthor', methods=['GET','POST'])
-@login_required
-def editAuthor():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getAuthors'
-    response = requests.get(url)
-    return render_template("editAuthor.html", title="SMES - Edit Author", authors=response.json())
-
-@page.route('requestBook', methods=['GET','POST'])
-@login_required
-def requestBook():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/getBooks'
-    response = requests.get(url)
-    return render_template("reqBook.html", title="SMES - Request Book", books=response.json())
-
-@page.route('approveBook', methods=['GET','POST'])
-@login_required
-def approveBook():
-    scheme = request.scheme
-    host = request.host
-    url = f'{scheme}://{host}/approvebook'
-    response = requests.get(url).json()
-    return render_template("approveBook.html",title="SMES - Datasets", reqs = response["requests"])
 @page.route('data', methods=['GET','POST'])
 @login_required
 def userdashboard():
-    # lst = list()
-    # if current_user.is_authenticated:
-    #     user_id = current_user.email
-    #     print(user_id)
-    #     issues = Issue.query.filter_by(assigned_to=user_id, status="Approved")
-    #     for issue in issues:
-    #         book = Books.query.filter_by(id=issue.book_id).first()
-    #         lst.append({
-    #             "id": book.id,
-    #             "name": book.book_name,
-    #             "topic": book.topic,
-    #             "publisher": book.publisher,
-    #             "year":book.year,
-    #             "url":"http://localhost:5000/getPdfOfBook?id="+str(book.id)
-    #         })
-    # print(lst)
-    return render_template("dashboard.html",title="SMES - Approve Book")
+    return render_template("dashboard.html",title="SMES - User Dashboard")
 
 @page.route('logout', methods=['GET','POST'])
 @login_required
@@ -167,4 +41,39 @@ def graph():
 
 
 
-
+@page.route('compile', methods=['GET', 'POST'])
+def compile_sketch():
+    baud_rate = 9600
+    led_pin = 2
+    delay_time = 1000
+    sketch_content = render_template_string(
+        open('templates/sketch_template.ino.jinja').read(),
+        baud_rate=baud_rate,
+        led_pin=led_pin,
+        delay_time=delay_time
+    )
+    with tempfile.TemporaryDirectory() as temp_dir:
+        sketch_path = os.path.join(temp_dir, f'{temp_dir[5:]}.ino')
+        with open(sketch_path, 'w') as f:
+            f.write(sketch_content)
+        with tempfile.TemporaryDirectory() as build_path:
+            compile_command = [
+                'arduino-cli', 'compile', '--fqbn', 'esp8266:esp8266:nodemcuv2',
+                '--build-path', build_path, sketch_path
+            ]
+        result = subprocess.run(compile_command, capture_output=True, text=True)
+        if result.returncode != 0:
+            return f"Compilation failed: {result.stderr}", 400
+        bin_file_path = None
+        for file_name in os.listdir(build_path):
+            if file_name.endswith('.bin'):
+                bin_file_path = os.path.join(build_path, file_name)
+                break
+        if not bin_file_path:
+            return "Hex file not found", 500
+        return send_file(bin_file_path, as_attachment=True, download_name='sketch.bin')
+    
+@page.route('addDevice', methods=['GET'])
+def add_device():
+    # This will redirect adding the device in the database
+    return render_template("add_device.html")

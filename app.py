@@ -50,47 +50,20 @@ app.register_blueprint(signup_page)
 # Adding the api's
 # Getters
 api.add_resource(GetUserList, '/getUsers')
-api.add_resource(GetBookList, '/getBooks')
-api.add_resource(GetAuthorList, '/getAuthors')
-api.add_resource(GetAuthorImage,'/getAuthorPhoto')
-api.add_resource(GetAuthorNameById,'/getAuthorName')
-api.add_resource(GetBooksOfAuthor, '/getBooksOfAuthor')
-api.add_resource(GetIssuedBookByUser, '/getIssuedBooksByUser')
-api.add_resource(GetNumberOfBookIssuedByUser, '/getNumberOfBooksIssuedByUser')
-api.add_resource(GetParticularBookInformation, '/getParticularBookInformation')
-api.add_resource(GetImagesOfUser, '/getImagesOfUser')
-api.add_resource(GetImageOfBook, '/getImageOfBook')
-api.add_resource(GetImageOfParticularBook, '/getImageOfParticularBook')
-api.add_resource(GetStatisticsOfUser, '/getStatisticsOfUser')
-api.add_resource(GetPdfOfBook, '/getPdfOfBook')
-api.add_resource(GetBookByTopic, '/getBookByTopic')
-api.add_resource(GetBookInformation, '/getBookInformation')
-api.add_resource(GetSectionList, '/getSections')
+
 # Setters
 api.add_resource(ChangePassword, '/changePassword')
-api.add_resource(ChangeBookName, '/changeBook')
-api.add_resource(ChangeAuthorName, '/changeAuthor')
+
 # creators
-api.add_resource(CreateBook, '/createBook')
 api.add_resource(CreateUser, '/createUser')
-api.add_resource(CreateAuthor, '/createAuthor')
-api.add_resource(CreateSection, '/createSection')
+
 # Deleters
-api.add_resource(DeleteBook, '/deleteBook')
 api.add_resource(DeleteUser, '/deleteUser')
-api.add_resource(DeleteAuthor, '/deleteAuthor')
-api.add_resource(DeleteSection, '/deleteSection')
+
 
 # Middlewares
 api.add_resource(AuthUser, '/authUser')
 api.add_resource(AuthAdmin, '/authAdmin')
-api.add_resource(RequestBook, '/reqBook')
-api.add_resource(ApproveBook, '/approvebook')
-api.add_resource(GetBookName, '/getBookName')
-api.add_resource(GetUserName, '/getUserName')
-api.add_resource(ApproveBookById,'/bookapprove')
-api.add_resource(GetParticularBookData,'/getBookbyId')
-api.add_resource(GetCurrentIssues,'/issues')
 api.add_resource(PostData, '/postData')
 api.add_resource(GetData, '/getData')
 if __name__ == '__main__':
