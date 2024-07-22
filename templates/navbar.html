@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 align-top sticky-top">
+    <div class="container">
+        <a href="{{url_for('base.home_render')}}" class="navbar-brand">
+            <img src="../static/Designer(1).jpeg" alt="logo" class="logo logo-rounded"><span class="h6">Smart Energy Monitoring System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-column" id="navbarNav">
+            <ul class="navbar-nav ms-auto flex-lg-row">
+                <li class="nav-item dropdown">
+                    {%if current_user.is_authenticated %}
+                    <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="{{url_for('base.graph')}}" class="dropdown-item bg-success text-white">
+                            Dashboard
+                        <a href="{{url_for('base.changePassword')}}" class="dropdown-item">
+                            Change Password
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="{{url_for('base.userdashboard')}}" class="nav-link">
+                        Data
+                    </a>
+                </li>
+                {%endif%}
+                <li class="nav-item">
+                    <!-- <a href="{{url_for('base.book_render')}}" class="nav-link">
+                        Books
+                    </a> -->
+                </li>
+                <li class="nav-item">
+                    <!-- <a href="{{url_for('base.author_render')}}" class="nav-link">
+                        Authors
+                    </a> -->
+                </li>
+                
+                {%if not current_user.is_authenticated %}
+                <li class="nav-link nav-item">
+                    <li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Login/Register
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{url_for('login.return_admin_login_page')}}" class="nav-link">Admin Login</a>
+                                <a class="dropdown-item" href="{{url_for('login.return_user_login_page')}}" class="nav-link">User Login</a>
+                                <a class="dropdown-item" href="{{url_for('signup.return_admin_signup_page')}}" class="nav-link">Admin Register</a>
+                                <a class="dropdown-item" href="{{url_for('signup.return_user_signup_page')}}" class="nav-link">User Register</a>
+                            </div>
+                        </li>
+                        {%endif%}
+                        {% if current_user.is_authenticated %}
+                        <li class="nav-link nav-item">
+                            <a href="{{url_for('base.graph')}}" class="dropdown-item text-white">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('base.logout') }}" class="btn btn-warning   ">Log Out</a>
+                        </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
