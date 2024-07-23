@@ -1,5 +1,6 @@
 from flask_restful import Resource
-from db.db import db, User, BLOB,Data
+from db.db import *
+from flask_login import current_user
 from flask import make_response,request,redirect,url_for,flash
 from werkzeug.utils import secure_filename
 import base64
@@ -53,12 +54,23 @@ class PostData(Resource):
         frequency = request.json["frequency"]
         power = request.json["power"]
         energy = request.json["energy"]
-        d = Data(time=time, date=date, current=current, voltage=voltage, frequency=frequency, power=power, energy=energy)
+        device_id = request.json["device_id"]
+        d = Data(time=time, date=date, current=current, voltage=voltage, frequency=frequency, power=power, energy=energy,device_id=device_id)
         db.session.add(d)
         db.session.commit()
         return {"message": "Data Transmitted Successfully"}
 
-
+class AddDevice(Resource):
+    def post(self):
+        data = request.get_json()
+        print(data)
+        device_name = data["name"]
+        location = data["location"]
+        wifi_name = data["wifi_name"]
+        password = data["password"]
+        device = Devices(user_id=current_user.id, device_name=device_name, device_location=location, wifi_name=wifi_name, password=password)
+        db.session.add(device)
+        db.session.commit()
+        flash("Device has been added successfully.")
+        return {"msg":"Device has been added."}
     
-        
-        

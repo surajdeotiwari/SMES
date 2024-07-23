@@ -42,15 +42,23 @@ def graph():
 
 
 @page.route('compile', methods=['GET', 'POST'])
+@login_required
 def compile_sketch():
     baud_rate = 9600
     led_pin = 2
     delay_time = 1000
+    wifi_name = request.form["wifi_name"]
+    password = request.form["password"]
+    device_id = request.form["device_id"]
+    print(wifi_name, password, device_id)
     sketch_content = render_template_string(
         open('templates/sketch_template.ino.jinja').read(),
         baud_rate=baud_rate,
         led_pin=led_pin,
-        delay_time=delay_time
+        delay_time=delay_time,
+        wifi_name = wifi_name,
+        password = password,
+        device_id=device_id
     )
     with tempfile.TemporaryDirectory() as temp_dir:
         sketch_path = os.path.join(temp_dir, f'{temp_dir[5:]}.ino')
@@ -74,6 +82,12 @@ def compile_sketch():
         return send_file(bin_file_path, as_attachment=True, download_name='sketch.bin')
     
 @page.route('addDevice', methods=['GET'])
+@login_required
 def add_device():
     # This will redirect adding the device in the database
     return render_template("add_device.html")
+
+@page.route('manageDevice', methods=['GET'])
+@login_required
+def manage_device():
+    return render_template("manage_device.html")

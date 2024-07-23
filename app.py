@@ -50,16 +50,17 @@ app.register_blueprint(signup_page)
 # Adding the api's
 # Getters
 api.add_resource(GetUserList, '/getUsers')
-
+api.add_resource(ListDevice, '/api/users/devices')
+api.add_resource(GetBinary, '/api/package/download')
 # Setters
 api.add_resource(ChangePassword, '/changePassword')
 
 # creators
 api.add_resource(CreateUser, '/createUser')
-
+api.add_resource(AddDevice, '/api/devices')
 # Deleters
 api.add_resource(DeleteUser, '/deleteUser')
-
+api.add_resource(RemoveDevice, '/api/delete/device')
 
 # Middlewares
 api.add_resource(AuthUser, '/authUser')
@@ -67,4 +68,4 @@ api.add_resource(AuthAdmin, '/authAdmin')
 api.add_resource(PostData, '/postData')
 api.add_resource(GetData, '/getData')
 if __name__ == '__main__':
-    app.run(port=5000,debug=True)
+    app.run(host='0.0.0.0',port=5000,debug=True)

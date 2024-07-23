@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Float, BLOB, LargeBinary, Date
-from sqlalchemy.orm import DeclarativeBase,relationship
+from sqlalchemy.orm import DeclarativeBase,relationship, backref
 from flask_login import UserMixin
 class Base(DeclarativeBase):
     pass
@@ -28,6 +28,8 @@ class User(db.Model):
 class Devices(db.Model):
     __tablename__ = 'devices'
     device_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", backref=backref("devices", lazy=True))
     device_name = Column(String)
     device_location = Column(String)
     wifi_name = Column(String)
@@ -42,4 +44,5 @@ class Data(db.Model):
     frequency = Column(Float)
     power = Column(Float)
     energy = Column(Float)
-    
+    device_id = Column(Integer, ForeignKey('devices.device_id'))
+    device = relationship("Devices", backref=backref("data", lazy=True))
