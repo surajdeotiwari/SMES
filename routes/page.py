@@ -22,7 +22,7 @@ def changePassword():
     return render_template("changePassword.html", title="SMES - Change Password")
 
 
-@page.route('data', methods=['GET','POST'])
+@page.route('/data', methods=['GET','POST'])
 @login_required
 def userdashboard():
     return render_template("dashboard.html",title="SMES - User Dashboard")

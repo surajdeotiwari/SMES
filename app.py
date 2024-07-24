@@ -54,7 +54,8 @@ api.add_resource(ListDevice, '/api/users/devices')
 api.add_resource(GetBinary, '/api/package/download')
 # Setters
 api.add_resource(ChangePassword, '/changePassword')
-
+api.add_resource(GetParticularDeviceData, '/api/device')
+api.add_resource(GetDeviceNameByID, '/api/device_name')
 # creators
 api.add_resource(CreateUser, '/createUser')
 api.add_resource(AddDevice, '/api/devices')

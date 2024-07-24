@@ -6,6 +6,7 @@ import os
 import tempfile
 import subprocess
 from flask_login import login_required,current_user
+import time
 class GetUserList(Resource):
     # API endpoint /getUsers
     def get(self):
@@ -54,7 +55,52 @@ class ListDevice(Resource):
                 }
             )
         return {"DeviceList":device_list}
-    
+
+class GetDeviceNameByID(Resource):
+    def get(self):
+        try:
+            d_id = int(request.args["device_id"])
+            allowed_device_data = Devices.query.filter_by(user_id = current_user.id).all()
+            devices = []
+            for device in allowed_device_data:
+                devices.append(device.device_id)
+            if d_id in devices:
+                query = Devices.query.filter_by(device_id = d_id).first()
+                return query.device_name
+            else:
+                return {"msg": "Not Allowed"}
+        except:
+            return {"msg": "Not Allowed"}
+class GetParticularDeviceData(Resource):
+    def get(self):
+        d_id = int(request.args["device_id"])
+        allowed_device_data = Devices.query.filter_by(user_id = current_user.id).all()
+        devices = []
+        for device in allowed_device_data:
+            devices.append(device.device_id)
+
+        if d_id in devices:
+            query = Data.query.filter_by(device_id=d_id).all()
+            lst = []
+            for q in query:
+                lst.append({
+                    "time": q.time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "date": q.date,  # No need to convert to string
+                    "current": q.current,
+                    "voltage": q.voltage,
+                    "frequency": q.frequency,
+                    "power": q.power,
+                    "energy": q.energy,
+                    # "device_id": q.device_id
+                })
+            return {"data": lst}
+        else:
+            return "You are not allowed to do such query.", 400
+
+            
+
+
+
 class GetBinary(Resource):
     def post(self):
         baud_rate = 9600
@@ -78,14 +124,16 @@ class GetBinary(Resource):
             sketch_path = os.path.join(temp_dir, f'{temp_dir[5:]}.ino')
             with open(sketch_path, 'w') as f:
                 f.write(sketch_content)
+            
             with tempfile.TemporaryDirectory() as build_path:
                 compile_command = [
                     'arduino-cli', 'compile', '--fqbn', 'esp8266:esp8266:nodemcuv2',
                     '--build-path', build_path, sketch_path
-                ]
+                    ]
+                print(build_path, sketch_path)
             result = subprocess.run(compile_command, capture_output=True, text=True)
             if result.returncode != 0:
-                return f"Compilation failed: {result.stderr}", 400
+                return f"Compilation failed here: {result.stderr}", 400
             bin_file_path = None
             for file_name in os.listdir(build_path):
                 if file_name.endswith('.bin'):
